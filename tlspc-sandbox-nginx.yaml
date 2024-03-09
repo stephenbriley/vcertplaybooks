@@ -1,0 +1,25 @@
+config:
+  connection:
+    platform: vaas
+    credentials:
+      apiKey: "96502618-1a9d-4843-86be-033cf9d642aa"
+certificateTasks:
+  - name: myCertificate # Task Identifier, no relevance in tool run
+    renewBefore: 10%
+    request:
+      csr: service
+      subject:
+        # Templating needs to go between single quotes to avoid issues when refreshing tokens and saving back
+        #commonName: '{{ Hostname | ToLower -}}.mimlab.io'
+        commonName: 'nginxlab-cmesandbox.mimlab.io'
+        country: US
+        locality: Salt Lake City
+        state: Utah
+        organization: Venafi, Inc.
+      zone: "Sample Devops Group1\\Digicert Webserver (90 Days)"
+    installations:
+      - format: PEM
+        file: "/etc/nginx/ssl/vcert-nginx.crt"
+        chainFile: "/etc/nginx/ssl/vcert-chain.crt"
+        keyFile: "/etc/nginx/ssl/nginx.key"
+        afterInstallAction: "cat /etc/nginx/ssl/vcert-nginx.crt /etc/nginx/ssl/vcert-chain.crt > /etc/nginx/ssl/nginx.crt && systemctl restart nginx"

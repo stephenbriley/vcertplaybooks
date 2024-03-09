@@ -1,0 +1,31 @@
+config:
+  connection:
+    platform: vaas
+    credentials:
+      apiKey: "96502618-1a9d-4843-86be-033cf9d642aa"
+certificateTasks:
+  - name: myCertificate # Task Identifier, no relevance in tool run
+    renewBefore: 10%
+    request:
+      csr: local
+      #keyPassword: "newPassword!"
+      sanDNS:
+        - tomcatlab.venafilab.com
+        - apachelab.venafilab.com
+        - jmlinux.venafilab.com
+        - nginxlab.venafilab.com
+      subject:
+        # Templating needs to go between single quotes to avoid issues when refreshing tokens and saving back
+        commonName: '{{ Hostname | ToLower -}}.mimlab.io'
+        #commonName: 'apachelab.cmesandbox.mimlab.io'
+        country: US
+        locality: Salt Lake City
+        state: Utah
+        organization: Venafi, Inc.
+      zone: "Sample Devops Group1\\relaxed-webserver-365day (Sample)"
+    installations:
+      - format: JKS
+        file: "certificate_keystore.jks"
+        jksAlias: venafi-jks
+        jksPassword: foobar123 # Minimum six characters length
+        afterInstallAction: "echo Success!!!"
